@@ -1,0 +1,1 @@
+# vimar-blinds-hack

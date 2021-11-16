@@ -1,0 +1,237 @@
+#==================
+#=== Substitutions
+#==================
+substitutions:
+  device_name: vimar-blinds-hack-controller
+  friendly_name: ESPHome Vimar Blinds Hack Controller
+
+esphome:
+  name: ${device_name}
+  platform: ESP8266
+  board: nodemcuv2
+  includes:
+  - utility.h
+  project:
+    name: "Bigmoby.vimar-blinds-hack"
+    version: "1.0.0"
+  on_boot:
+    priority: 600
+    then:
+      - lambda: |-
+          reset_selettore_tapparelle();          
+
+# Enable Home Assistant API
+api:
+  password: !secret api_password
+
+ota:
+  password: !secret ota_password
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  manual_ip:
+    static_ip: !secret wifi_static_ip
+    gateway: 192.168.1.1
+    subnet: 255.255.255.0
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails 
+  ap:
+    ssid: "Vimar Blinds Hack Hotspot"
+    password: !secret ap_password
+
+web_server:
+  port: 80
+  auth:
+    username: !secret web_user
+    password: !secret web_password
+
+mqtt:
+  broker: !secret mqtt_broker
+  username: !secret mqtt_user
+  password: !secret mqtt_password
+
+# Enable logging
+logger: 
+
+sensor:
+  #=== Uptime
+  - platform: uptime
+    name: ${friendly_name} Uptime
+
+  #=== WiFi Signal
+  - platform: wifi_signal
+    name: ${friendly_name} WiFi Signal
+    update_interval: 60s
+
+  #=== Failsafe time
+  - platform: homeassistant
+    id: failsafe_time
+    name: ${friendly_name} Hack Tapparelle Failsafe Time
+    entity_id: input_number.hack_tapparelle_failsafe_time_in_seconds
+
+globals:
+  - id: scena_tapparella_in_uso
+    type: int
+    restore_value: no
+    initial_value: '1'
+
+#=== Switches
+switch:
+  #=== Relay chiudi
+  - platform: gpio
+    pin: 
+      number: 5
+      inverted: True
+    name: Relay chiudi
+    icon: "mdi:stop-circle-outline"
+    id: relayOpen
+    restore_mode : ALWAYS_OFF
+    interlock: &interlock_group [relayOpen, relayClose, relaySelectPlus, relaySelectMinus]
+    on_turn_on:
+    - delay: 300ms
+    - switch.turn_off: relayOpen
+
+  #=== Relay apri
+  - platform: gpio
+    pin: 
+      number: 4
+      inverted: True
+    name: Relay apri
+    icon: "mdi:play-circle-outline"
+    id: relayClose
+    restore_mode : ALWAYS_OFF
+    interlock: *interlock_group
+    on_turn_on:
+    - delay: 300ms
+    - switch.turn_off: relayClose
+
+  #=== Relay seleziona tapparella superiore
+  - platform: gpio
+    pin: 
+      number: 14
+      inverted: True
+    name: Relay seleziona tapparella superiore
+    icon: "mdi:stop-circle-outline"
+    id: relaySelectPlus
+    restore_mode : ALWAYS_OFF
+    interlock: *interlock_group
+    on_turn_on:
+    - delay: 300ms
+    - switch.turn_off: relaySelectPlus
+
+  #=== Relay seleziona tapparella inferiore
+  - platform: gpio
+    pin: 
+      number: 12
+      inverted: True
+    name: Relay seleziona tapparella inferiore
+    icon: "mdi:play-circle-outline"
+    id: relaySelectMinus
+    restore_mode : ALWAYS_OFF
+    interlock: *interlock_group
+    on_turn_on:
+    - delay: 300ms
+    - switch.turn_off: relaySelectMinus   
+
+number:
+  - platform: template
+    name: "Seleziona scena tapparelle"
+    id: tapparelle_scena_control
+    update_interval: 5s
+    initial_value: 1
+    min_value: 0
+    max_value: 15
+    step: 1  
+    set_action:
+      - lambda: |-
+          if (x == 0) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), 0);
+            id(scena_tapparella_in_uso) = 0;
+            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
+          } else if (x == 1) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), 1);
+            id(scena_tapparella_in_uso) = 1;
+            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
+          } else if (x == 2) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), 2);
+            id(scena_tapparella_in_uso) = 2;
+            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
+          } else if (x == 3) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), 3);
+            id(scena_tapparella_in_uso) = 3;
+            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
+          } else if (x == 4) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), 4);
+            id(scena_tapparella_in_uso) = 4;
+            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
+          } else if (x == 5) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), 5);
+            id(scena_tapparella_in_uso) = 5;
+            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
+          } else if (x == 6) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), 6);
+            id(scena_tapparella_in_uso) = 6;
+            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
+          } else if (x == 7) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), 7);
+            id(scena_tapparella_in_uso) = 7;
+            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
+          } else if (x == 8) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), 8);
+            id(scena_tapparella_in_uso) = 8;
+            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
+          } else if (x == 9) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), 9);
+            id(scena_tapparella_in_uso) = 9;
+            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
+          } else if (x == 10) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), 10);
+            id(scena_tapparella_in_uso) = 10;
+            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
+          } else if (x == 11) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), 11);
+            id(scena_tapparella_in_uso) = 11;
+            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
+          } else if (x == 12) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), 12);
+            id(scena_tapparella_in_uso) = 12;
+            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
+          } else if (x == 13) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), 13);
+            id(scena_tapparella_in_uso) = 13;
+            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
+          } else if (x == 14) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), 14);
+            id(scena_tapparella_in_uso) = 14;
+            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
+          } else if (x == 15) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), 15);
+            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
+            id(scena_tapparella_in_uso) = 15;
+          } else {
+            reset_selettore_tapparelle();
+            id(scena_tapparella_in_uso) = 0;
+            ESP_LOGE("main", "Set scena_tapparella_in_uso DEFAULT value %d", id(scena_tapparella_in_uso));
+          }    
+
+cover:
+  - platform: template
+    name: "Tapparelle casa"
+    id: tapparelle_template
+    close_action:
+      - switch.turn_off: relayClose
+      - switch.turn_on: relayOpen
+      - delay: 0.3s
+      - switch.turn_off: relayOpen
+    open_action:
+      - switch.turn_off: relayOpen
+      - switch.turn_on: relayClose
+      - delay: 0.3s
+      - switch.turn_off: relayClose
+    on_open:
+      - logger.log: "Le tapparelle sono Aperte!"
+    on_closed:
+      - logger.log: "Le tapparelle sono Chiuse!"      
+    optimistic: true
+    assumed_state: true
