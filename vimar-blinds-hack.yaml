@@ -133,82 +133,24 @@ number:
   - platform: template
     name: "Seleziona scena tapparelle"
     id: tapparelle_scena_control
-    update_interval: 5s
+    update_interval: 3s
     initial_value: 1
+    optimistic: true
     min_value: 0
     max_value: 15
     step: 1  
     set_action:
       - lambda: |-
-          if (x == 0) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), 0);
-            id(scena_tapparella_in_uso) = 0;
+          if (x >= 0 && x <= 15) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), x);
+            id(scena_tapparella_in_uso) = x;
             ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
-          } else if (x == 1) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), 1);
-            id(scena_tapparella_in_uso) = 1;
-            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
-          } else if (x == 2) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), 2);
-            id(scena_tapparella_in_uso) = 2;
-            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
-          } else if (x == 3) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), 3);
-            id(scena_tapparella_in_uso) = 3;
-            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
-          } else if (x == 4) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), 4);
-            id(scena_tapparella_in_uso) = 4;
-            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
-          } else if (x == 5) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), 5);
-            id(scena_tapparella_in_uso) = 5;
-            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
-          } else if (x == 6) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), 6);
-            id(scena_tapparella_in_uso) = 6;
-            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
-          } else if (x == 7) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), 7);
-            id(scena_tapparella_in_uso) = 7;
-            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
-          } else if (x == 8) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), 8);
-            id(scena_tapparella_in_uso) = 8;
-            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
-          } else if (x == 9) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), 9);
-            id(scena_tapparella_in_uso) = 9;
-            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
-          } else if (x == 10) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), 10);
-            id(scena_tapparella_in_uso) = 10;
-            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
-          } else if (x == 11) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), 11);
-            id(scena_tapparella_in_uso) = 11;
-            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
-          } else if (x == 12) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), 12);
-            id(scena_tapparella_in_uso) = 12;
-            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
-          } else if (x == 13) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), 13);
-            id(scena_tapparella_in_uso) = 13;
-            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
-          } else if (x == 14) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), 14);
-            id(scena_tapparella_in_uso) = 14;
-            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
-          } else if (x == 15) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), 15);
-            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
-            id(scena_tapparella_in_uso) = 15;
           } else {
             reset_selettore_tapparelle();
             id(scena_tapparella_in_uso) = 0;
+            id(tapparelle_scena_control).state = 0;
             ESP_LOGE("main", "Set scena_tapparella_in_uso DEFAULT value %d", id(scena_tapparella_in_uso));
-          }    
+          }  
 
 cover:
   - platform: template
