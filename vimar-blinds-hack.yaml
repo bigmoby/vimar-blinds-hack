@@ -13,12 +13,7 @@ esphome:
   - utility.h
   project:
     name: "Bigmoby.vimar-blinds-hack"
-    version: "1.0.0"
-  on_boot:
-    priority: 600
-    then:
-      - lambda: |-
-          reset_selettore_tapparelle();          
+    version: "1.0.0"         
 
 # Enable Home Assistant API
 api:
