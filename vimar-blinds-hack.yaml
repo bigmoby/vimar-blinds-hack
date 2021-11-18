@@ -35,12 +35,6 @@ wifi:
     ssid: "Vimar Blinds Hack Hotspot"
     password: !secret ap_password
 
-web_server:
-  port: 80
-  auth:
-    username: !secret web_user
-    password: !secret web_password
-
 mqtt:
   broker: !secret mqtt_broker
   username: !secret mqtt_user
@@ -82,7 +76,7 @@ switch:
     icon: "mdi:stop-circle-outline"
     id: relayOpen
     restore_mode : ALWAYS_OFF
-    interlock: &interlock_group [relayOpen, relayClose, relaySelectPlus, relaySelectMinus]
+    interlock: &interlock_group [relayOpen, relayClose, relaySelectPlus, relaySelectMinus, relayStop]
     on_turn_on:
     - delay: 300ms
     - switch.turn_off: relayOpen
@@ -129,6 +123,47 @@ switch:
     - delay: 300ms
     - switch.turn_off: relaySelectMinus   
 
+  #=== Relay tapparella stop
+  - platform: gpio
+    pin: 
+      number: 13
+      inverted: True
+    name: Relay tapparella stop
+    icon: "mdi:play-circle-outline"
+    id: relayStop
+    restore_mode : ALWAYS_OFF
+    interlock: *interlock_group
+    on_turn_on:
+    - delay: 300ms
+    - switch.turn_off: relayStop 
+
+  #=== Relay 6
+  - platform: gpio
+    pin: 
+      number: 15
+      inverted: True
+    name: Relay 6
+    id: relay6
+    restore_mode : ALWAYS_OFF
+
+  #=== Relay 7
+  - platform: gpio
+    pin: 
+      number: 16
+      inverted: True
+    name: Relay 7
+    id: relay7
+    restore_mode : ALWAYS_OFF 
+
+  #=== Relay 8
+  - platform: gpio
+    pin: 
+      number: 0
+      inverted: True
+    name: Relay 8
+    id: relay8
+    restore_mode : ALWAYS_OFF                
+
 number:
   - platform: template
     name: "Seleziona scena tapparelle"
@@ -158,17 +193,25 @@ cover:
     id: tapparelle_template
     close_action:
       - switch.turn_off: relayClose
+      - switch.turn_off: relayStop
       - switch.turn_on: relayOpen
       - delay: 0.3s
       - switch.turn_off: relayOpen
     open_action:
       - switch.turn_off: relayOpen
+      - switch.turn_off: relayStop
       - switch.turn_on: relayClose
       - delay: 0.3s
       - switch.turn_off: relayClose
+    stop_action:
+      - switch.turn_off: relayOpen
+      - switch.turn_off: relayClose
+      - switch.turn_on: relayStop
+      - delay: 0.3s
+      - switch.turn_off: relayStop    
     on_open:
       - logger.log: "Le tapparelle sono Aperte!"
     on_closed:
-      - logger.log: "Le tapparelle sono Chiuse!"      
+      - logger.log: "Le tapparelle sono Chiuse!"  
     optimistic: true
     assumed_state: true
