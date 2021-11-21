@@ -79,7 +79,7 @@ switch:
     restore_mode : ALWAYS_OFF
     interlock: &interlock_group [relayOpen, relayClose, relaySelectPlus, relaySelectMinus, relayStop]
     on_turn_on:
-    - delay: 100ms
+    - delay: 400ms
     - switch.turn_off: relayOpen
 
   #=== Relay apri
@@ -94,7 +94,7 @@ switch:
     restore_mode : ALWAYS_OFF
     interlock: *interlock_group
     on_turn_on:
-    - delay: 100ms
+    - delay: 400ms
     - switch.turn_off: relayClose
 
   #=== Relay seleziona tapparella superiore
@@ -108,9 +108,6 @@ switch:
     internal: true
     restore_mode : ALWAYS_OFF
     interlock: *interlock_group
-    on_turn_on:
-    - delay: 100ms
-    - switch.turn_off: relaySelectPlus
 
   #=== Relay seleziona tapparella inferiore
   - platform: gpio
@@ -121,11 +118,8 @@ switch:
     icon: "mdi:play-circle-outline"
     id: relaySelectMinus
     internal: true
-    restore_mode : ALWAYS_OFF
+    restore_mode : ALWAYS_OFF  
     interlock: *interlock_group
-    on_turn_on:
-    - delay: 100ms
-    - switch.turn_off: relaySelectMinus   
 
   #=== Relay tapparella stop
   - platform: gpio
@@ -139,7 +133,7 @@ switch:
     restore_mode : ALWAYS_OFF
     interlock: *interlock_group
     on_turn_on:
-    - delay: 100ms
+    - delay: 400ms
     - switch.turn_off: relayStop 
 
   #=== Relay 6
@@ -169,28 +163,42 @@ switch:
     id: relay8
     restore_mode : ALWAYS_OFF                
 
-number:
+select:
   - platform: template
-    name: "Seleziona scena tapparelle"
-    id: tapparelle_scena_control
-    update_interval: 3s
-    initial_value: 1
+    name: "Template select scene"
+    id: tapparelle_select_scena_control
     optimistic: true
-    min_value: 0
-    max_value: 15
-    step: 1  
+    options:
+      - "1"
+      - "2"
+      - "3"
+      - "4"
+      - "5"
+      - "6"
+      - "7"
+      - "8"
+      - "9"
+      - "10"
+      - "11"
+      - "12"
+      - "13"
+      - "14"
+      - "15"
+      - "0"
+    initial_option: "1"
     set_action:
       - lambda: |-
-          if (x >= 0 && x <= 15) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), x);
-            id(scena_tapparella_in_uso) = x;
+          int int_value = atoi(x.c_str());
+          if (int_value >= 0 && int_value <= 15) {
+            set_selettore_tapparelle(id(scena_tapparella_in_uso), int_value);
+            id(scena_tapparella_in_uso) = int_value;
             ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
           } else {
             reset_selettore_tapparelle();
             id(scena_tapparella_in_uso) = 0;
-            id(tapparelle_scena_control).state = 0;
+            id(tapparelle_select_scena_control).state = "0";
             ESP_LOGE("main", "Set scena_tapparella_in_uso DEFAULT value %d", id(scena_tapparella_in_uso));
-          }  
+          } 
 
 cover:
   - platform: template
