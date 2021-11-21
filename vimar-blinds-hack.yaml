@@ -8,7 +8,7 @@ substitutions:
 esphome:
   name: ${device_name}
   platform: ESP8266
-  board: d1_mini
+  board: nodemcuv2
   includes:
   - utility.h
   project:
@@ -70,7 +70,7 @@ switch:
   #=== Relay chiudi
   - platform: gpio
     pin: 
-      number: 14
+      number: 12
       inverted: True
     name: Relay chiudi
     icon: "mdi:stop-circle-outline"
@@ -79,13 +79,13 @@ switch:
     restore_mode : ALWAYS_OFF
     interlock: &interlock_group [relayOpen, relayClose, relaySelectPlus, relaySelectMinus, relayStop]
     on_turn_on:
-    - delay: 300ms
+    - delay: 100ms
     - switch.turn_off: relayOpen
 
   #=== Relay apri
   - platform: gpio
     pin: 
-      number: 12
+      number: 16
       inverted: True
     name: Relay apri
     icon: "mdi:play-circle-outline"
@@ -94,13 +94,13 @@ switch:
     restore_mode : ALWAYS_OFF
     interlock: *interlock_group
     on_turn_on:
-    - delay: 300ms
+    - delay: 100ms
     - switch.turn_off: relayClose
 
   #=== Relay seleziona tapparella superiore
   - platform: gpio
     pin: 
-      number: 13
+      number: 2
       inverted: True
     name: Relay seleziona tapparella superiore
     icon: "mdi:stop-circle-outline"
@@ -109,13 +109,13 @@ switch:
     restore_mode : ALWAYS_OFF
     interlock: *interlock_group
     on_turn_on:
-    - delay: 300ms
+    - delay: 100ms
     - switch.turn_off: relaySelectPlus
 
   #=== Relay seleziona tapparella inferiore
   - platform: gpio
     pin: 
-      number: 15
+      number: 13
       inverted: True
     name: Relay seleziona tapparella inferiore
     icon: "mdi:play-circle-outline"
@@ -124,13 +124,13 @@ switch:
     restore_mode : ALWAYS_OFF
     interlock: *interlock_group
     on_turn_on:
-    - delay: 300ms
+    - delay: 100ms
     - switch.turn_off: relaySelectMinus   
 
   #=== Relay tapparella stop
   - platform: gpio
     pin: 
-      number: 2
+      number: 14
       inverted: True
     name: Relay tapparella stop
     icon: "mdi:play-circle-outline"
@@ -139,7 +139,7 @@ switch:
     restore_mode : ALWAYS_OFF
     interlock: *interlock_group
     on_turn_on:
-    - delay: 300ms
+    - delay: 100ms
     - switch.turn_off: relayStop 
 
   #=== Relay 6
