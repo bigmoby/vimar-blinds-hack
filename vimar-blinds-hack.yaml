@@ -8,7 +8,7 @@ substitutions:
 esphome:
   name: ${device_name}
   platform: ESP8266
-  board: nodemcuv2
+  board: d1_mini
   includes:
   - utility.h
   project:
@@ -70,11 +70,12 @@ switch:
   #=== Relay chiudi
   - platform: gpio
     pin: 
-      number: 5
+      number: 14
       inverted: True
     name: Relay chiudi
     icon: "mdi:stop-circle-outline"
     id: relayOpen
+    internal: true
     restore_mode : ALWAYS_OFF
     interlock: &interlock_group [relayOpen, relayClose, relaySelectPlus, relaySelectMinus, relayStop]
     on_turn_on:
@@ -84,11 +85,12 @@ switch:
   #=== Relay apri
   - platform: gpio
     pin: 
-      number: 4
+      number: 12
       inverted: True
     name: Relay apri
     icon: "mdi:play-circle-outline"
     id: relayClose
+    internal: true
     restore_mode : ALWAYS_OFF
     interlock: *interlock_group
     on_turn_on:
@@ -98,11 +100,12 @@ switch:
   #=== Relay seleziona tapparella superiore
   - platform: gpio
     pin: 
-      number: 14
+      number: 13
       inverted: True
     name: Relay seleziona tapparella superiore
     icon: "mdi:stop-circle-outline"
     id: relaySelectPlus
+    internal: true
     restore_mode : ALWAYS_OFF
     interlock: *interlock_group
     on_turn_on:
@@ -112,11 +115,12 @@ switch:
   #=== Relay seleziona tapparella inferiore
   - platform: gpio
     pin: 
-      number: 12
+      number: 15
       inverted: True
     name: Relay seleziona tapparella inferiore
     icon: "mdi:play-circle-outline"
     id: relaySelectMinus
+    internal: true
     restore_mode : ALWAYS_OFF
     interlock: *interlock_group
     on_turn_on:
@@ -126,11 +130,12 @@ switch:
   #=== Relay tapparella stop
   - platform: gpio
     pin: 
-      number: 13
+      number: 2
       inverted: True
     name: Relay tapparella stop
     icon: "mdi:play-circle-outline"
     id: relayStop
+    internal: true
     restore_mode : ALWAYS_OFF
     interlock: *interlock_group
     on_turn_on:
@@ -140,7 +145,7 @@ switch:
   #=== Relay 6
   - platform: gpio
     pin: 
-      number: 15
+      number: 0
       inverted: True
     name: Relay 6
     id: relay6
@@ -149,7 +154,7 @@ switch:
   #=== Relay 7
   - platform: gpio
     pin: 
-      number: 16
+      number: 4
       inverted: True
     name: Relay 7
     id: relay7
@@ -158,7 +163,7 @@ switch:
   #=== Relay 8
   - platform: gpio
     pin: 
-      number: 0
+      number: 5
       inverted: True
     name: Relay 8
     id: relay8
