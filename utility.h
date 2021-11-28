@@ -7,7 +7,7 @@ void reset_selettore_tapparelle() {
 }
 
 void set_selettore_tapparelle(int scena_tapparella_attuale, int scena_tapparella_voluta) {
-  delay(6000);
+  delay(11000);
 
   id(relayStop).turn_on();
   delay(400);
