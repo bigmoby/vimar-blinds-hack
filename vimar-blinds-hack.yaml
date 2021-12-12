@@ -192,12 +192,12 @@ select:
           if (int_value >= 0 && int_value <= 15) {
             set_selettore_tapparelle(id(scena_tapparella_in_uso), int_value);
             id(scena_tapparella_in_uso) = int_value;
-            ESP_LOGE("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
+            ESP_LOGD("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
           } else {
             reset_selettore_tapparelle();
             id(scena_tapparella_in_uso) = 0;
             id(tapparelle_select_scena_control).state = "0";
-            ESP_LOGE("main", "Set scena_tapparella_in_uso DEFAULT value %d", id(scena_tapparella_in_uso));
+            ESP_LOGD("main", "Set scena_tapparella_in_uso DEFAULT value %d", id(scena_tapparella_in_uso));
           } 
 
 cover:
