@@ -155,14 +155,14 @@ switch:
       number: 5
       inverted: True
     name: Reset comandi tapparelle
-    id: relay8
+    id: relayPowerOff
     restore_mode : ALWAYS_OFF   
     on_turn_on:
     - delay: 500ms
     - switch.turn_on: relayStop
     - delay: 500ms
     - switch.turn_off: relayStop
-    - switch.turn_off: relay8    
+    - switch.turn_off: relayPowerOff    
     
 select:
   - platform: template
