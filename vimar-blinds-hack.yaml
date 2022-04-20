@@ -191,7 +191,7 @@ select:
       - lambda: |-
           int int_value = atoi(x.c_str());
           if (int_value >= 0 && int_value <= 15) {
-            set_selettore_tapparelle(id(scena_tapparella_in_uso), int_value);
+            set_selettore_tapparelle(int_value);
             id(scena_tapparella_in_uso) = int_value;
             ESP_LOGD("main", "Set scena_tapparella_in_uso %d", id(scena_tapparella_in_uso));
           } else {
