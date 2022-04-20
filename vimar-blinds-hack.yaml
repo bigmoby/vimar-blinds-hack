@@ -30,11 +30,6 @@ wifi:
     gateway: 192.168.1.1
     subnet: 255.255.255.0
 
-  # Enable fallback hotspot (captive portal) in case wifi connection fails 
-  ap:
-    ssid: "Vimar Blinds Hack Hotspot"
-    password: !secret ap_password
-
 mqtt:
   broker: !secret mqtt_broker
   username: !secret mqtt_user
@@ -159,10 +154,16 @@ switch:
     pin: 
       number: 5
       inverted: True
-    name: Relay 8
+    name: Reset comandi tapparelle
     id: relay8
-    restore_mode : ALWAYS_OFF                
-
+    restore_mode : ALWAYS_OFF   
+    on_turn_on:
+    - delay: 500ms
+    - switch.turn_on: relayStop
+    - delay: 500ms
+    - switch.turn_off: relayStop
+    - switch.turn_off: relay8    
+    
 select:
   - platform: template
     name: "Template select scene"
